@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🖼️ Images Gallery - EVI</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
+    <link rel="manifest" href="/static/site.webmanifest">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #00d4ff 0%, #3b82f6 25%, #8b5cf6 75%, #ec4899 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --danger-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --border-radius: 16px;
+            --shadow: 0 20px 40px rgba(0,0,0,0.1);
+            --shadow-hover: 0 30px 60px rgba(0,0,0,0.15);
+        }
+
+        /* Dark Mode Variables (Default) - Matching React UI */
+        [data-theme="dark"] {
+            --dark-bg: #020617;
+            --card-bg: #0f172a;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent-color: #3b82f6;
+            --input-bg: rgba(15, 23, 42, 0.8);
+            --input-border: rgba(51, 65, 85, 0.5);
+            --nav-bg: rgba(15, 23, 42, 0.95);
+            --nav-border: rgba(51, 65, 85, 0.5);
+            --status-bg: rgba(59, 130, 246, 0.1);
+            --file-bg: rgba(15, 23, 42, 0.8);
+            --upload-bg: rgba(15, 23, 42, 0.5);
+            --upload-border: rgba(51, 65, 85, 0.5);
+            --result-bg: rgba(15, 23, 42, 0.8);
+            --result-border: rgba(51, 65, 85, 0.5);
+        }
+
+        /* Light Mode Variables - Soft, elevated look */
+        [data-theme="light"] {
+            --dark-bg: #f3f4f7;
+            --card-bg: #ffffff;
+            --result-bg: #ffffff;
+            --result-border: rgba(148, 163, 184, 0.35);
+            --file-bg: #f9fafb;
+            --upload-bg: #f3f4ff;
+            --upload-border: rgba(129, 140, 248, 0.45);
+            --status-bg: rgba(129, 140, 248, 0.10);
+            --text-primary: #0f172a;
+            --text-secondary: #6b7280;
+            --accent-color: #6366f1;
+            --input-bg: rgba(255, 255, 255, 0.95);
+            --input-border: rgba(148, 163, 184, 0.6);
+            --nav-bg: rgba(255, 255, 255, 0.96);
+            --nav-border: rgba(203, 213, 225, 0.9);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Global Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--input-bg);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(59, 130, 246, 0.5);
+            border-radius: 4px;
+            transition: background 0.2s ease;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(59, 130, 246, 0.8);
+        }
+
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(59, 130, 246, 0.5) var(--input-bg);
+        }
+
+        /* Animated Background - Removed black background */
+        .bg-animated {
+            display: none;
+        }
+
+        /* Header - Matching React UI */
+        .main-header {
+            background: var(--nav-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--nav-border);
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            height: 64px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: var(--accent-color);
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .logo:hover {
+            transform: translateY(-1px);
+            opacity: 0.9;
+        }
+
+        .logo i {
+            font-size: 1.75rem;
+            color: var(--accent-color);
+            filter: drop-shadow(0 2px 4px rgba(59, 130, 246, 0.3));
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover i {
+            filter: drop-shadow(0 4px 8px rgba(59, 130, 246, 0.5));
+        }
+
+        .logo span {
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .header-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .header-btn:hover {
+            background: var(--status-bg);
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--status-bg);
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .main-container {
+            padding: 2rem 1rem;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 640px) {
+            .main-container {
+                padding: 2rem 1.5rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .main-container {
+                padding: 2rem 2rem;
+            }
+        }
+
+        .page-header {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--result-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .images-count-badge {
+            background: var(--accent-color);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .header-actions-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .detect-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.5rem;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .detect-btn:hover {
+            background: #dc2626;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        .detect-btn:active {
+            transform: translateY(0);
+        }
+
+        .detect-btn i {
+            font-size: 0.9rem;
+        }
+
+        .images-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .image-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid var(--result-border);
+            overflow: hidden;
+        }
+
+        .image-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--accent-color);
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+        }
+
+        .image-name {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .loading-state, .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .loading-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: spin 1s linear infinite;
+            color: var(--accent-color);
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body data-theme="dark">
+
+    <!-- Header - Matching React UI -->
+    <header class="main-header">
+        <div class="header-content">
+            <!-- Left Side - Logo -->
+            <a href="/evi-scan" class="logo">
+                <i class="fas fa-fingerprint"></i>
+                <span>EVI</span>
+            </a>
+
+            <!-- Right Side - Back Button -->
+            <div class="header-actions">
+                <a href="javascript:history.back()" class="back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">
+                <i class="fas fa-images"></i> Images Gallery
+            </h1>
+            <div class="header-actions-group">
+                <div class="images-count-badge" id="imagesCountBadge">
+                    <span id="imagesCountText">0 images</span>
+                </div>
+                <button class="detect-btn" id="detectBtn" onclick="detectImages()">
+                    <i class="fas fa-search"></i>
+                    Detect
+                </button>
+            </div>
+        </div>
+
+        <!-- Images Gallery -->
+        <div id="imagesGallery" class="images-gallery" style="display: none;">
+            <!-- Images will be loaded here -->
+        </div>
+
+        <!-- Loading State -->
+        <div id="imagesLoading" class="loading-state">
+            <i class="fas fa-spinner"></i>
+            <p>Loading images...</p>
+        </div>
+
+        <!-- Empty State -->
+        <div id="imagesEmpty" class="empty-state" style="display: none;">
+            <i class="fas fa-image"></i>
+            <p>No images found. Upload a ZIP UFDR file with images to view them here.</p>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" style="position: fixed; top: 20px; right: 20px; z-index: 10001; max-width: 400px; pointer-events: none;"></div>
+
+    <script>
+        // Toast Notification System
+        function showToast(message, type = 'info', duration = 5000) {
+            const container = document.getElementById('toastContainer');
+            if (!container) return;
+            
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                pointer-events: auto;
+                padding: 1rem 1.25rem;
+                margin-bottom: 0.75rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                min-width: 300px;
+                max-width: 400px;
+                animation: slideInRight 0.3s ease-out;
+                transition: opacity 0.3s ease, transform 0.3s ease;
+                backdrop-filter: blur(10px);
+                background: ${type === 'success' ? 'rgba(34, 197, 94, 0.15)' : type === 'error' ? 'rgba(239, 68, 68, 0.15)' : type === 'warning' ? 'rgba(251, 191, 36, 0.15)' : 'rgba(59, 130, 246, 0.15)'};
+                border: 1px solid ${type === 'success' ? 'rgba(34, 197, 94, 0.4)' : type === 'error' ? 'rgba(239, 68, 68, 0.4)' : type === 'warning' ? 'rgba(251, 191, 36, 0.4)' : 'rgba(59, 130, 246, 0.4)'};
+                color: ${type === 'success' ? '#22c55e' : type === 'error' ? '#ef4444' : type === 'warning' ? '#fbbf24' : '#3b82f6'};
+            `;
+            
+            const icons = {
+                success: '✓',
+                error: '✕',
+                warning: '⚠',
+                info: 'ℹ'
+            };
+            
+            toast.innerHTML = `
+                <span style="font-size: 1.25rem; flex-shrink: 0;">${icons[type] || icons.info}</span>
+                <span style="flex: 1; font-size: 0.9rem; font-weight: 500; line-height: 1.4;">${message}</span>
+                <button onclick="this.parentElement.remove()" style="background: none; border: none; color: inherit; cursor: pointer; font-size: 1.1rem; opacity: 0.7; padding: 0; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; transition: opacity 0.2s ease; flex-shrink: 0;">×</button>
+            `;
+            
+            container.appendChild(toast);
+            
+            // Auto-remove after duration
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (toast.parentElement) {
+                        toast.remove();
+                    }
+                }, 300);
+            }, duration);
+        }
+
+        // Add CSS animation for toast
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    opacity: 0;
+                    transform: translateX(100%);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Load images gallery on page load
+        async function loadImagesGallery() {
+            const imagesGallery = document.getElementById('imagesGallery');
+            const imagesLoading = document.getElementById('imagesLoading');
+            const imagesEmpty = document.getElementById('imagesEmpty');
+            
+            try {
+                imagesLoading.style.display = 'block';
+                imagesGallery.style.display = 'none';
+                imagesEmpty.style.display = 'none';
+                
+                const response = await fetch('/api/images');
+                const data = await response.json();
+                
+                imagesLoading.style.display = 'none';
+                
+                if (data.images && data.images.length > 0) {
+                    document.getElementById('imagesCountText').textContent = `${data.count} image${data.count !== 1 ? 's' : ''}`;
+                    
+                    // Clear previous images
+                    imagesGallery.innerHTML = '';
+                    
+                    // Display images in grid
+                    data.images.forEach((img, index) => {
+                        const imgCard = document.createElement('div');
+                        imgCard.className = 'image-card';
+                        
+                        // Create image element
+                        const imgElement = document.createElement('img');
+                        imgElement.src = `/api/media/${encodeURIComponent(img.path)}`;
+                        imgElement.alt = img.name;
+                        imgElement.onerror = function() {
+                            this.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="250" height="200"><rect width="250" height="200" fill="%23ccc"/><text x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="%23999">Image not found</text></svg>';
+                        };
+                        
+                        // Image name
+                        const imgName = document.createElement('div');
+                        imgName.className = 'image-name';
+                        imgName.textContent = img.name;
+                        
+                        imgCard.appendChild(imgElement);
+                        imgCard.appendChild(imgName);
+                        
+                        // Click to view full size
+                        imgCard.onclick = function() {
+                            window.open(`/api/media/${encodeURIComponent(img.path)}`, '_blank');
+                        };
+                        
+                        imagesGallery.appendChild(imgCard);
+                    });
+                    
+                    imagesGallery.style.display = 'grid';
+                } else {
+                    imagesEmpty.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error loading images:', error);
+                imagesLoading.style.display = 'none';
+                imagesEmpty.style.display = 'block';
+                imagesEmpty.innerHTML = '<i class="fas fa-exclamation-circle"></i><p>Error loading images. Please try again later.</p>';
+            }
+        }
+
+        // Refresh/Reload images function
+        async function detectImages() {
+            const detectBtn = document.getElementById('detectBtn');
+            const originalText = detectBtn.innerHTML;
+            
+            // Disable button and show loading state
+            detectBtn.disabled = true;
+            detectBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Refreshing...';
+            detectBtn.style.opacity = '0.7';
+            detectBtn.style.cursor = 'not-allowed';
+            
+            try {
+                // Reload images gallery
+                await loadImagesGallery();
+                
+                // Show success message
+                showToast('Images refreshed successfully', 'success');
+            } catch (error) {
+                console.error('Error refreshing images:', error);
+                showToast('Error refreshing images. Please try again.', 'error');
+            } finally {
+                // Re-enable button
+                detectBtn.disabled = false;
+                detectBtn.innerHTML = originalText;
+                detectBtn.style.opacity = '1';
+                detectBtn.style.cursor = 'pointer';
+            }
+        }
+
+        // Initialize theme from localStorage (sync with main dashboard)
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeTheme();
+            loadImagesGallery();
+        });
+    </script>
+</body>
+</html>

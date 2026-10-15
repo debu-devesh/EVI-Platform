@@ -1,0 +1,203 @@
+/* Import Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* GLOBAL */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #1C1F26;
+    font-family: 'Poppins', sans-serif;
+    color: white;
+}
+
+/* NAVBAR */
+.navbar {
+    width: 100%;
+    padding: 20px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #11141A;
+    border-bottom: 1px solid #2A2E38;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 50;
+}
+
+.nav-logo {
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.nav-logo span {
+    color: #2D7CFF;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 35px;
+}
+
+.nav-links li a {
+    text-decoration: none;
+    color: #d0d4e0;
+    font-size: 16px;
+    transition: 0.2s;
+}
+
+.nav-links li a:hover {
+    color: #2D7CFF;
+}
+
+/* LAYOUT */
+.container {
+    display: flex;
+    height: 100vh;
+    margin-top: 80px; /* account for navbar */
+}
+
+/* LEFT PANEL */
+.left-panel {
+    width: 50%;
+    padding: 60px;
+    background: url('forensics-bg.jpg') center/cover no-repeat;
+    background-color: rgba(0,0,0,0.55);
+    background-blend-mode: overlay;
+}
+
+.branding h2 {
+    font-weight: 600;
+}
+
+.branding h3 {
+    margin-top: 20px;
+    font-size: 32px;
+    font-weight: 600;
+}
+
+.branding h3 span {
+    color: #2D7CFF;
+}
+
+.branding p {
+    margin-top: 10px;
+    width: 70%;
+    color: #c7c7c7;
+}
+
+.btn-group {
+    margin-top: 30px;
+}
+
+.btn-outline,
+.btn-primary {
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 15px;
+    border: none;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid #2D7CFF;
+    color: #fff;
+}
+
+.btn-outline:hover {
+    background: #2D7CFF33;
+}
+
+.btn-primary {
+    background: #2D7CFF;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: #1e5fd1;
+}
+
+/* RIGHT PANEL */
+.right-panel {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-box {
+    width: 75%;
+    background: #11141A;
+    padding: 40px;
+    border-radius: 16px;
+}
+
+.form-box h2 {
+    margin-bottom: 30px;
+    font-size: 28px;
+}
+
+/* FORM FIELDS */
+.input-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group label {
+    font-size: 14px;
+    color: #bfc3cf;
+    margin-bottom: 5px;
+}
+
+.input-group input {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #2A2E38;
+    background: #1A1D23;
+    color: white;
+}
+
+.input-row {
+    display: flex;
+    gap: 15px;
+}
+
+.small-text {
+    margin: 15px 0;
+    color: #A0A6B5;
+    font-size: 14px;
+}
+
+.small-text a {
+    color: #2D7CFF;
+}
+
+.full {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.left-panel {
+    width: 50%;
+    padding: 60px;
+
+    /* Insert downloaded image here */
+    background: url('assets/forensic.webp') center/cover no-repeat;
+
+    /* Dark overlay to match the reference style */
+    background-color: rgba(0, 0, 0, 0.55);
+    background-blend-mode: overlay;
+
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}

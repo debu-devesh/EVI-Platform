@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔐 EVI - Authentication</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #00d4ff 0%, #3b82f6 25%, #8b5cf6 75%, #ec4899 100%);
+            --dark-bg: #1a1a2e;
+            --card-bg: #16213e;
+            --text-primary: #ffffff;
+            --text-secondary: #b8c5d6;
+            --accent-color: #00d4ff;
+            --input-bg: rgba(255, 255, 255, 0.05);
+            --input-border: rgba(255, 255, 255, 0.1);
+            --border-radius: 12px;
+            --shadow: 0 20px 40px rgba(0,0,0,0.2);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .bg-animated {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(-45deg, #1a1a2e, #16213e, #0f3460, #533483);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .auth-container {
+            background: rgba(22, 33, 62, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 1000px;
+            overflow: hidden;
+            display: flex;
+            min-height: 600px;
+        }
+
+        .auth-left {
+            flex: 1;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .auth-right {
+            flex: 1;
+            background: url('assets/background.jpg') no-repeat center center;
+            background-size: cover;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Removed dark overlay to show full image brightness */
+        .auth-right::before {
+            display: none;
+        }
+        
+        .auth-right-content {
+            position: relative;
+            z-index: 1;
+            color: white;
+            max-width: 100%;
+            padding: 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            color: var(--accent-color);
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            margin-right: 0.75rem;
+        }
+
+        .auth-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .auth-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: var(--border-radius);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.2);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-google {
+            background: #fff;
+            color: #444;
+            border: 1px solid #ddd;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .btn-google:hover {
+            background: #f5f5f5;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-google i {
+            margin-right: 0.5rem;
+            color: #DB4437;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 1.5rem 0;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--input-border);
+        }
+
+        .divider:not(:empty)::before {
+            margin-right: 1rem;
+        }
+
+        .divider:not(:empty)::after {
+            margin-left: 1rem;
+        }
+
+        .auth-footer {
+            margin-top: 2rem;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .auth-footer a {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            display: inline-block;
+            padding: 0.3rem 0.5rem;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+            color: #00d4ff;
+            transform: translateY(-1px);
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 2rem 0;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            font-size: 0.95rem;
+        }
+
+        .feature-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .feature-text {
+            line-height: 1.5;
+        }
+
+        .app-version {
+            position: absolute;
+            bottom: 1.5rem;
+            left: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            .auth-container {
+                flex-direction: column;
+                max-width: 100%;
+            }
+
+            .auth-left, .auth-right {
+                padding: 2rem 1.5rem;
+            }
+
+            .auth-right {
+                display: none;
+            }
+
+            .app-version {
+                display: none;
+            }
+        }
+
+        /* Toggle password visibility */
+        .password-input {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0.25rem;
+            font-size: 1rem;
+        }
+
+        /* Form validation */
+        .is-invalid {
+            border-color: #ff6b6b !important;
+        }
+
+        .invalid-feedback {
+            color: #ff6b6b;
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .is-invalid + .invalid-feedback {
+            display: block;
+        }
+
+        /* Loading state */
+        .btn-loading {
+            position: relative;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .btn-loading::after {
+            content: '';
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 0.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Custom checkbox */
+        .form-check {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-check-input {
+            width: 1.1rem;
+            height: 1.1rem;
+            margin-right: 0.5rem;
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .form-check-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        /* Animation for form elements */
+        .form-group {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Add delay for each form group */
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; }
+        .form-group:nth-child(3) { animation-delay: 0.3s; }
+        .form-group:nth-child(4) { animation-delay: 0.4s; }
+        .form-group:nth-child(5) { animation-delay: 0.5s; }
+        .form-group:nth-child(6) { animation-delay: 0.6s; }
+    </style>
+</head>
+<body>
+    <div class="bg-animated"></div>
+    
+    <div class="auth-container">
+        <!-- Left Side - Login Form -->
+        <div class="auth-left">
+            <div class="logo">
+                <i class="fas fa-fingerprint"></i>
+                <span>EVI</span>
+            </div>
+            
+            <h1 class="auth-title">Welcome Back</h1>
+            <p class="auth-subtitle">Sign in to access your forensic dashboard</p>
+            
+            <form id="loginForm" class="auth-form" method="POST" action="/login">
+                <div class="form-group">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
+                    <div class="invalid-feedback">Please enter a valid email address</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="password-input">
+                        <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required>
+                        <button type="button" class="toggle-password" id="togglePassword">
+                            <i class="far fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="invalid-feedback">Password must be at least 8 characters</div>
+                </div>
+                
+                <div class="form-group" style="margin-bottom: 0.5rem;">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="rememberMe">
+                        <label class="form-check-label" for="rememberMe">Remember me</label>
+                    </div>
+                </div>
+                
+                <div class="form-group" style="text-align: right; margin-bottom: 1.5rem;">
+                    <a href="#" style="color: var(--accent-color); text-decoration: none; font-size: 0.9rem;">
+                        Forgot password?
+                    </a>
+                </div>
+                
+                {% if captcha_text %}
+                <div class="form-group">
+                    <label class="form-label">CAPTCHA</label>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="background: rgba(255,255,255,0.1); padding: 10px 15px; border-radius: 8px; font-size: 1.2rem; letter-spacing: 3px; font-weight: bold; min-width: 100px; text-align: center;">
+                            {{ captcha_text }}
+                        </div>
+                        <input type="text" name="captcha" class="form-control" placeholder="Enter CAPTCHA" required style="flex: 1;">
+                        <input type="hidden" name="captcha_id" value="{{ captcha_id }}">
+                    </div>
+                </div>
+                {% endif %}
+                
+                <button type="submit" class="btn btn-primary" id="loginBtn">
+                    <span>Sign In</span>
+                </button>
+                
+                <div class="divider">OR</div>
+                
+                <button type="button" class="btn btn-google">
+                    <i class="fab fa-google"></i>
+                    <span>Continue with Google</span>
+                </button>
+                
+                <div class="auth-footer">
+                    Don't have an account? <a href="/signup" id="showSignup">Create an account</a>
+                </div>
+            </form>
+            
+            <div class="app-version">EVI v2.0.3</div>
+        </div>
+        
+        <!-- Right Side - Welcome/Info -->
+        <div class="auth-right">
+            <div class="auth-right-content">
+                <!-- Background image only -->
+            </div>
+            <div style="margin-top: auto; padding-top: 2rem; border-top: 1px solid rgba(255, 255, 255, 0.1); font-size: 0.85rem; opacity: 0.7;">
+                <i class="fas fa-lock"></i> Your data is securely encrypted in transit and at rest.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle password visibility
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#password');
+        
+        togglePassword.addEventListener('click', function () {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            this.querySelector('i').classList.toggle('fa-eye');
+            this.querySelector('i').classList.toggle('fa-eye-slash');
+        });
+
+        // Form validation
+        const loginForm = document.getElementById('loginForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('loginBtn');
+
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(String(email).toLowerCase());
+        }
+
+        function validatePassword(password) {
+            return password.length >= 8;
+        }
+
+        function updateButtonState() {
+            const isEmailValid = validateEmail(emailInput.value);
+            const isPasswordValid = validatePassword(passwordInput.value);
+            
+            if (isEmailValid && isPasswordValid) {
+                loginBtn.disabled = false;
+            } else {
+                loginBtn.disabled = true;
+            }
+        }
+
+        emailInput.addEventListener('input', function() {
+            const isValid = validateEmail(this.value);
+            this.classList.toggle('is-invalid', !isValid && this.value.length > 0);
+            updateButtonState();
+        });
+
+        passwordInput.addEventListener('input', function() {
+            const isValid = validatePassword(this.value);
+            this.classList.toggle('is-invalid', !isValid && this.value.length > 0);
+            updateButtonState();
+        });
+
+        // Form submission
+        loginForm.addEventListener('submit', function(e) {
+            // Validate form before submission
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+            
+            if (!validateEmail(email)) {
+                e.preventDefault();
+                emailInput.classList.add('is-invalid');
+                return false;
+            }
+            
+            if (!validatePassword(password)) {
+                e.preventDefault();
+                passwordInput.classList.add('is-invalid');
+                return false;
+            }
+            
+            // Show loading state (form will submit normally)
+            const originalBtnText = loginBtn.innerHTML;
+            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Authenticating...';
+            loginBtn.disabled = true;
+            loginBtn.classList.add('btn-loading');
+            
+            // Let the form submit normally - Flask will handle redirect
+            // The form action and method are set correctly in HTML
+            return true;  // Allow form submission
+        });
+
+        // Smooth scroll to top when page loads
+        window.scrollTo(0, 0);
+    </script>
+</body>
+</html>

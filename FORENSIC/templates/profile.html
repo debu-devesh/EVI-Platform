@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - EVI</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #00d4ff 0%, #3b82f6 25%, #8b5cf6 75%, #ec4899 100%);
+        }
+
+        [data-theme="dark"] {
+            --dark-bg: #0a0e27;
+            --card-bg: rgba(15, 23, 42, 0.5);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent-color: #3b82f6;
+            --border-color: rgba(59, 130, 246, 0.2);
+            --sidebar-bg: rgba(15, 23, 42, 0.8);
+        }
+
+        [data-theme="light"] {
+            --dark-bg: #f3f4f7;
+            --card-bg: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #6b7280;
+            --accent-color: #6366f1;
+            --border-color: rgba(148, 163, 184, 0.35);
+            --sidebar-bg: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            display: flex;
+        }
+
+        .profile-container {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        /* Left Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            padding: 2rem 1.5rem;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+
+        .sidebar-section {
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+            padding: 0 0.75rem;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            margin-bottom: 0.25rem;
+            cursor: pointer;
+        }
+
+        .sidebar-item:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent-color);
+        }
+
+        .sidebar-item.active {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-color);
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .sidebar-item i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-item.delete {
+            color: #ef4444;
+            margin-top: 1rem;
+        }
+
+        .sidebar-item.delete:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            max-width: 800px;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .content-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .edit-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+
+        .edit-btn:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .profile-picture-section {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-picture {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 600;
+            color: white;
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-picture img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .upload-section {
+            flex: 1;
+        }
+
+        .upload-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-btn:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: var(--accent-color);
+        }
+
+        .upload-hint {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .info-field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .info-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .info-value {
+            font-size: 1rem;
+            color: var(--text-primary);
+            padding: 0.75rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        .info-value.editable {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .info-value.editable:hover {
+            border-color: var(--accent-color);
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .info-value input,
+        .info-value textarea {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .info-value textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-cancel {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-cancel:hover {
+            background: rgba(148, 163, 184, 0.1);
+        }
+
+        .btn-save {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Right Sidebar - Progress Tracker */
+        .right-sidebar {
+            width: 320px;
+            background: var(--sidebar-bg);
+            border-left: 1px solid var(--border-color);
+            padding: 2rem;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .progress-section {
+            margin-bottom: 2rem;
+        }
+
+        .progress-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .progress-circle {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+
+        .progress-svg {
+            transform: rotate(-90deg);
+        }
+
+        .progress-bg {
+            fill: none;
+            stroke: var(--border-color);
+            stroke-width: 8;
+        }
+
+        .progress-bar {
+            fill: none;
+            stroke: var(--accent-color);
+            stroke-width: 8;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        .progress-checklist {
+            list-style: none;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            font-size: 0.875rem;
+            color: var(--text-primary);
+        }
+
+        .checklist-item.completed {
+            color: var(--text-secondary);
+        }
+
+        .checklist-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .checklist-icon.completed {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+        }
+
+        .checklist-icon.pending {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .checklist-value {
+            margin-left: auto;
+            font-weight: 600;
+            color: #22c55e;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-success {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #22c55e;
+        }
+
+        .alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 1024px) {
+            .right-sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .profile-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main-content {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <!-- Left Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Profile</div>
+                <div class="sidebar-item active" data-section="edit-profile">
+                    <i class="fas fa-edit"></i>
+                    <span>Edit Profile</span>
+                </div>
+                <div class="sidebar-item" data-section="recent-activity">
+                    <i class="fas fa-history"></i>
+                    <span>Recent Activity</span>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">Security</div>
+                <div class="sidebar-item" data-section="password">
+                    <i class="fas fa-lock"></i>
+                    <span>Password</span>
+                </div>
+                <div class="sidebar-item" data-section="account-security">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Account Security</span>
+                </div>
+                <div class="sidebar-item" data-section="sessions">
+                    <i class="fas fa-desktop"></i>
+                    <span>Sessions</span>
+                </div>
+            </div>
+
+            <div class="sidebar-item delete" onclick="confirmDeleteAccount()">
+                <i class="fas fa-trash"></i>
+                <span>Delete Account</span>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div id="alertContainer"></div>
+
+            <!-- Edit Profile Section -->
+            <div id="edit-profile-section" class="content-section">
+                <div class="page-header">
+                    <h1 class="page-title">Edit Profile</h1>
+                    <p class="page-subtitle">Update your profile information and preferences</p>
+                </div>
+
+                <!-- Profile Picture -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Profile Picture</h3>
+                    </div>
+                    <div class="profile-picture-section">
+                        <div class="profile-picture" id="profilePicture">
+                            <span id="profileInitial">{{ name[0].upper() if name else 'U' }}</span>
+                            <img id="profileImage" src="" alt="Profile" class="hidden">
+                        </div>
+                        <div class="upload-section">
+                            <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                                <i class="fas fa-upload"></i>
+                                <span>Upload new photo</span>
+                            </button>
+                            <input type="file" id="fileInput" accept="image/*" class="hidden" onchange="handleImageUpload(event)">
+                            <p class="upload-hint">At least 800x800 px recommended. JPG or PNG is allowed.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personal Info -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Personal Info</h3>
+                        <button class="edit-btn" onclick="toggleEdit('personalInfo')">
+                            <i class="fas fa-edit"></i>
+                            <span>Edit</span>
+                        </button>
+                    </div>
+                    <div id="personalInfo">
+                        <div class="info-field">
+                            <label class="info-label">Full Name</label>
+                            <div class="info-value" id="fullNameDisplay">{{ name or 'Not set' }}</div>
+                            <div class="info-value hidden" id="fullNameEdit">
+                                <input type="text" id="firstName" value="{{ first_name }}" placeholder="First Name">
+                                <input type="text" id="lastName" value="{{ last_name }}" placeholder="Last Name" style="margin-top: 0.5rem;">
+                            </div>
+                        </div>
+                        <div class="info-field">
+                            <label class="info-label">Email</label>
+                            <div class="info-value" id="emailDisplay">{{ email }}</div>
+                            <div class="info-value hidden" id="emailEdit">
+                                <input type="email" id="email" value="{{ email }}">
+                            </div>
+                        </div>
+                        <div class="info-field">
+                            <label class="info-label">Phone</label>
+                            <div class="info-value" id="phoneDisplay">Not set</div>
+                            <div class="info-value hidden" id="phoneEdit">
+                                <input type="tel" id="phone" placeholder="Phone number">
+                            </div>
+                        </div>
+                        <div class="action-buttons hidden" id="personalInfoActions">
+                            <button class="btn btn-cancel" onclick="cancelEdit('personalInfo')">Cancel</button>
+                            <button class="btn btn-save" onclick="savePersonalInfo()">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Location -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Location</h3>
+                    </div>
+                    <div class="info-field">
+                        <div class="info-value" id="locationDisplay">Not set</div>
+                        <div class="info-value hidden" id="locationEdit">
+                            <input type="text" id="location" placeholder="Enter your location">
+                        </div>
+                    </div>
+                    <div class="action-buttons hidden" id="locationActions">
+                        <button class="btn btn-cancel" onclick="cancelEdit('location')">Cancel</button>
+                        <button class="btn btn-save" onclick="saveLocation()">Save changes</button>
+                    </div>
+                </div>
+
+                <!-- Bio -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Bio</h3>
+                        <button class="edit-btn" onclick="toggleEdit('bio')">
+                            <i class="fas fa-edit"></i>
+                            <span>Edit</span>
+                        </button>
+                    </div>
+                    <div class="info-field">
+                        <div class="info-value" id="bioDisplay">No bio added yet.</div>
+                        <div class="info-value hidden" id="bioEdit">
+                            <textarea id="bio" placeholder="Tell us about yourself..."></textarea>
+                        </div>
+                    </div>
+                    <div class="action-buttons hidden" id="bioActions">
+                        <button class="btn btn-cancel" onclick="cancelEdit('bio')">Cancel</button>
+                        <button class="btn btn-save" onclick="saveBio()">Save changes</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Password Section -->
+            <div id="password-section" class="content-section hidden">
+                <div class="page-header">
+                    <h1 class="page-title">Change Password</h1>
+                    <p class="page-subtitle">Update your password to keep your account secure</p>
+                </div>
+                <div class="content-card">
+                    <div class="info-field">
+                        <label class="info-label">Current Password</label>
+                        <div class="info-value">
+                            <input type="password" id="currentPassword" placeholder="Enter current password">
+                        </div>
+                    </div>
+                    <div class="info-field">
+                        <label class="info-label">New Password</label>
+                        <div class="info-value">
+                            <input type="password" id="newPassword" placeholder="Enter new password" minlength="8">
+                        </div>
+                    </div>
+                    <div class="info-field">
+                        <label class="info-label">Confirm New Password</label>
+                        <div class="info-value">
+                            <input type="password" id="confirmPassword" placeholder="Confirm new password" minlength="8">
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-save" onclick="changePassword()">Change Password</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account Security Section -->
+            <div id="account-security-section" class="content-section hidden">
+                <div class="page-header">
+                    <h1 class="page-title">Account Security</h1>
+                    <p class="page-subtitle">Manage your account security settings</p>
+                </div>
+                <div class="content-card">
+                    <div class="info-field">
+                        <label class="info-label">Account Status</label>
+                        <div class="info-value" id="accountStatus">Active</div>
+                    </div>
+                    <div class="info-field">
+                        <label class="info-label">Last Login</label>
+                        <div class="info-value" id="lastLogin">{{ last_login or 'Never' }}</div>
+                    </div>
+                    <div class="info-field">
+                        <label class="info-label">Account Created</label>
+                        <div class="info-value" id="accountCreated">{{ created_at or 'Unknown' }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity Section -->
+            <div id="recent-activity-section" class="content-section hidden">
+                <div class="page-header">
+                    <h1 class="page-title">Recent Activity</h1>
+                    <p class="page-subtitle">View your recent account activity</p>
+                </div>
+                <div class="content-card">
+                    <div id="recentActivityList">
+                        <p style="text-align: center; color: var(--text-secondary); padding: 2rem;">Loading...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar - Progress Tracker -->
+        <div class="right-sidebar">
+            <div class="progress-section">
+                <h3 class="progress-title">Complete your profile</h3>
+                <div class="progress-circle">
+                    <svg class="progress-svg" width="120" height="120">
+                        <circle class="progress-bg" cx="60" cy="60" r="54"></circle>
+                        <circle class="progress-bar" cx="60" cy="60" r="54" id="progressCircle" 
+                                stroke-dasharray="339.292" stroke-dashoffset="203.575"></circle>
+                    </svg>
+                    <div class="progress-text" id="progressText">40%</div>
+                </div>
+                <ul class="progress-checklist">
+                    <li class="checklist-item completed">
+                        <div class="checklist-icon completed">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <span>Setup account</span>
+                        <span class="checklist-value">10%</span>
+                    </li>
+                    <li class="checklist-item completed">
+                        <div class="checklist-icon completed">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <span>Upload your photo</span>
+                        <span class="checklist-value">5%</span>
+                    </li>
+                    <li class="checklist-item completed">
+                        <div class="checklist-icon completed">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <span>Personal Info</span>
+                        <span class="checklist-value">10%</span>
+                    </li>
+                    <li class="checklist-item" id="locationCheck">
+                        <div class="checklist-icon pending">
+                            <i class="fas fa-times"></i>
+                        </div>
+                        <span>Location</span>
+                        <span class="checklist-value">+20%</span>
+                    </li>
+                    <li class="checklist-item completed">
+                        <div class="checklist-icon completed">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <span>Biography</span>
+                        <span class="checklist-value">15%</span>
+                    </li>
+                    <li class="checklist-item" id="securityCheck">
+                        <div class="checklist-icon pending">
+                            <i class="fas fa-times"></i>
+                        </div>
+                        <span>Account Security</span>
+                        <span class="checklist-value">+10%</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sidebar navigation
+        document.querySelectorAll('.sidebar-item[data-section]').forEach(item => {
+            item.addEventListener('click', () => {
+                const section = item.getAttribute('data-section');
+                showSection(section);
+                
+                // Update active state
+                document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+            });
+        });
+
+        function showSection(sectionName) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            const sectionMap = {
+                'edit-profile': 'edit-profile-section',
+                'password': 'password-section',
+                'account-security': 'account-security-section',
+                'recent-activity': 'recent-activity-section'
+            };
+            
+            const targetSection = document.getElementById(sectionMap[sectionName]);
+            if (targetSection) {
+                targetSection.classList.remove('hidden');
+            }
+        }
+
+        // Edit toggle functions
+        function toggleEdit(section) {
+            if (section === 'personalInfo') {
+                document.getElementById('fullNameDisplay').classList.add('hidden');
+                document.getElementById('emailDisplay').classList.add('hidden');
+                document.getElementById('phoneDisplay').classList.add('hidden');
+                document.getElementById('fullNameEdit').classList.remove('hidden');
+                document.getElementById('emailEdit').classList.remove('hidden');
+                document.getElementById('phoneEdit').classList.remove('hidden');
+                document.getElementById('personalInfoActions').classList.remove('hidden');
+            } else if (section === 'bio') {
+                document.getElementById('bioDisplay').classList.add('hidden');
+                document.getElementById('bioEdit').classList.remove('hidden');
+                document.getElementById('bioActions').classList.remove('hidden');
+            } else if (section === 'location') {
+                document.getElementById('locationDisplay').classList.add('hidden');
+                document.getElementById('locationEdit').classList.remove('hidden');
+                document.getElementById('locationActions').classList.remove('hidden');
+            }
+        }
+
+        function cancelEdit(section) {
+            if (section === 'personalInfo') {
+                document.getElementById('fullNameDisplay').classList.remove('hidden');
+                document.getElementById('emailDisplay').classList.remove('hidden');
+                document.getElementById('phoneDisplay').classList.remove('hidden');
+                document.getElementById('fullNameEdit').classList.add('hidden');
+                document.getElementById('emailEdit').classList.add('hidden');
+                document.getElementById('phoneEdit').classList.add('hidden');
+                document.getElementById('personalInfoActions').classList.add('hidden');
+            } else if (section === 'bio') {
+                document.getElementById('bioDisplay').classList.remove('hidden');
+                document.getElementById('bioEdit').classList.add('hidden');
+                document.getElementById('bioActions').classList.add('hidden');
+            } else if (section === 'location') {
+                document.getElementById('locationDisplay').classList.remove('hidden');
+                document.getElementById('locationEdit').classList.add('hidden');
+                document.getElementById('locationActions').classList.add('hidden');
+            }
+        }
+
+        // Location edit on click
+        document.getElementById('locationDisplay').addEventListener('click', () => {
+            toggleEdit('location');
+        });
+
+        // Save functions
+        async function savePersonalInfo() {
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            
+            try {
+                const response = await fetch('/api/profile/update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        first_name: firstName,
+                        last_name: lastName,
+                        email: email,
+                        username: '{{ username }}'
+                    })
+                });
+                
+                const result = await response.json();
+                if (result.status === 'SUCCESS') {
+                    showAlert('Profile updated successfully', 'success');
+                    document.getElementById('fullNameDisplay').textContent = `${firstName} ${lastName}`;
+                    document.getElementById('emailDisplay').textContent = email;
+                    cancelEdit('personalInfo');
+                    updateProgress();
+                } else {
+                    showAlert(result.message || 'Error updating profile', 'error');
+                }
+            } catch (error) {
+                showAlert('Error updating profile', 'error');
+            }
+        }
+
+        async function saveLocation() {
+            const location = document.getElementById('location').value;
+            if (!location.trim()) {
+                showAlert('Please enter a location', 'error');
+                return;
+            }
+            
+            document.getElementById('locationDisplay').textContent = location;
+            cancelEdit('location');
+            showAlert('Location updated', 'success');
+            updateProgress();
+        }
+
+        async function saveBio() {
+            const bio = document.getElementById('bio').value;
+            document.getElementById('bioDisplay').textContent = bio || 'No bio added yet.';
+            cancelEdit('bio');
+            showAlert('Bio updated', 'success');
+            updateProgress();
+        }
+
+        async function changePassword() {
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (newPassword !== confirmPassword) {
+                showAlert('New passwords do not match', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/profile/change-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        current_password: currentPassword,
+                        new_password: newPassword,
+                        confirm_password: confirmPassword
+                    })
+                });
+                
+                const result = await response.json();
+                if (result.status === 'SUCCESS') {
+                    showAlert('Password changed successfully', 'success');
+                    document.getElementById('currentPassword').value = '';
+                    document.getElementById('newPassword').value = '';
+                    document.getElementById('confirmPassword').value = '';
+                } else {
+                    showAlert(result.message || 'Error changing password', 'error');
+                }
+            } catch (error) {
+                showAlert('Error changing password', 'error');
+            }
+        }
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    document.getElementById('profileImage').src = e.target.result;
+                    document.getElementById('profileImage').classList.remove('hidden');
+                    document.getElementById('profileInitial').classList.add('hidden');
+                    showAlert('Profile picture updated', 'success');
+                    updateProgress();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function updateProgress() {
+            // Calculate progress based on completed items
+            let progress = 40; // Base: setup (10%) + photo (5%) + personal (10%) + bio (15%)
+            
+            const location = document.getElementById('locationDisplay').textContent;
+            if (location && location !== 'Not set') {
+                progress += 20;
+                document.getElementById('locationCheck').classList.add('completed');
+                document.getElementById('locationCheck').querySelector('.checklist-icon').classList.remove('pending');
+                document.getElementById('locationCheck').querySelector('.checklist-icon').classList.add('completed');
+                document.getElementById('locationCheck').querySelector('.checklist-icon').innerHTML = '<i class="fas fa-check"></i>';
+            }
+            
+            // Update progress circle
+            const circumference = 2 * Math.PI * 54;
+            const offset = circumference - (progress / 100) * circumference;
+            document.getElementById('progressCircle').style.strokeDashoffset = offset;
+            document.getElementById('progressText').textContent = progress + '%';
+        }
+
+        async function loadRecentActivity() {
+            try {
+                const response = await fetch('/api/profile/stats');
+                const data = await response.json();
+                
+                if (data.status === 'SUCCESS' && data.recent_activity) {
+                    const container = document.getElementById('recentActivityList');
+                    if (data.recent_activity.length > 0) {
+                        container.innerHTML = data.recent_activity.map(activity => {
+                            const timestamp = new Date(activity.timestamp).toLocaleString();
+                            return `
+                                <div style="padding: 1rem; border-bottom: 1px solid var(--border-color);">
+                                    <div style="font-weight: 500; margin-bottom: 0.25rem;">${activity.action}</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">${timestamp}</div>
+                                </div>
+                            `;
+                        }).join('');
+                    } else {
+                        container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 2rem;">No recent activity</p>';
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading activity:', error);
+            }
+        }
+
+        async function loadSecurityInfo() {
+            try {
+                const response = await fetch('/api/profile/security');
+                const data = await response.json();
+                if (data.status === 'SUCCESS' && data.security) {
+                    document.getElementById('accountStatus').textContent = data.security.is_active ? 'Active' : 'Inactive';
+                    if (data.security.last_login) {
+                        document.getElementById('lastLogin').textContent = new Date(data.security.last_login).toLocaleString();
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading security info:', error);
+            }
+        }
+
+        function showAlert(message, type) {
+            const container = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type} show`;
+            alert.textContent = message;
+            container.innerHTML = '';
+            container.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.classList.remove('show');
+                setTimeout(() => alert.remove(), 300);
+            }, 3000);
+        }
+
+        function confirmDeleteAccount() {
+            if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                showAlert('Account deletion is not yet implemented', 'error');
+            }
+        }
+
+        // Initialize
+        loadRecentActivity();
+        loadSecurityInfo();
+        updateProgress();
+    </script>
+</body>
+</html>

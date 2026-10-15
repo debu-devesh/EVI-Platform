@@ -1,0 +1,11 @@
+Flask==2.3.3
+psycopg2-binary==2.9.9
+bcrypt==4.1.2
+Werkzeug==2.3.7
+
+
+
+
+
+
+

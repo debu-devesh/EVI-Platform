@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EVI - Create Account</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0F1419;
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            width: 100%;
+            padding: 15px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1A1F26;
+            border-bottom: 1px solid #2A2E38;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 24px;
+            font-weight: 600;
+            text-decoration: none;
+            color: white;
+        }
+
+        .nav-logo i {
+            font-size: 1.5rem;
+            color: #2D7CFF;
+        }
+
+        .nav-logo span {
+            color: #2D7CFF;
+        }
+
+        .nav-center {
+            display: flex;
+            align-items: center;
+            gap: 35px;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 35px;
+            margin: 0;
+        }
+
+        .nav-links li a {
+            text-decoration: none;
+            color: #d0d4e0;
+            font-size: 15px;
+            transition: 0.2s;
+            padding: 8px 16px;
+            border-radius: 6px;
+        }
+
+        .nav-links li a:hover {
+            color: #2D7CFF;
+        }
+
+        .nav-links li a.active {
+            background: rgba(45, 124, 255, 0.1);
+            color: #2D7CFF;
+        }
+
+        .nav-search {
+            display: flex;
+            align-items: center;
+            background: #252A33;
+            border: 1px solid #2A2E38;
+            border-radius: 8px;
+            padding: 8px 15px;
+            gap: 10px;
+        }
+
+        .nav-search input {
+            background: transparent;
+            border: none;
+            color: #d0d4e0;
+            font-size: 14px;
+            width: 200px;
+            outline: none;
+        }
+
+        .nav-search input::placeholder {
+            color: #6B7280;
+        }
+
+        .nav-search i {
+            color: #6B7280;
+            font-size: 14px;
+        }
+
+        /* LAYOUT */
+        .container {
+            display: flex;
+            min-height: 100vh;
+            margin-top: 70px;
+        }
+
+        /* LEFT PANEL */
+        .left-panel {
+            width: 35%;
+            padding: 80px 60px;
+            background: url('/static/assets/background.jpg') center/cover no-repeat;
+            background-color: rgba(0,0,0,0.6);
+            background-blend-mode: overlay;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .branding h2 {
+            font-weight: 600;
+            font-size: 16px;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+        }
+
+        .branding h3 {
+            font-size: 42px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .branding h3 span {
+            color: #2D7CFF;
+        }
+
+        .branding p {
+            width: 85%;
+            color: #c7c7c7;
+            line-height: 1.8;
+            font-size: 15px;
+            margin-bottom: 40px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn-outline,
+        .btn-primary {
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid white;
+            color: #fff;
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-primary {
+            background: #2D7CFF;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #1e5fd1;
+        }
+
+        /* RIGHT PANEL */
+        .right-panel {
+            width: 65%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            background: #0F1419;
+        }
+
+        .form-box {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .form-box h2 {
+            margin-bottom: 40px;
+            font-size: 36px;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+
+        .form-box h2::after {
+            content: '';
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            background: #2D7CFF;
+            border-radius: 50%;
+        }
+
+        /* FLASH MESSAGES */
+        .flash-messages {
+            margin-bottom: 25px;
+        }
+
+        .flash-message {
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .flash-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+
+        .flash-success {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #86efac;
+        }
+
+        /* FORM FIELDS */
+        .input-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .input-group label {
+            font-size: 14px;
+            color: #bfc3cf;
+            margin-bottom: 8px;
+            display: block;
+            font-weight: 500;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px 50px 14px 16px;
+            border-radius: 10px;
+            border: 1px solid #2A2E38;
+            background: #1A1F26;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #2D7CFF;
+            background: #1F252B;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6B7280;
+            font-size: 16px;
+            pointer-events: none;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .input-row .input-group {
+            flex: 1;
+        }
+
+        .password-input {
+            position: relative;
+        }
+
+        .password-input input {
+            padding-right: 50px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #6B7280;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 5px;
+            z-index: 10;
+        }
+
+        .toggle-password:hover {
+            color: #2D7CFF;
+        }
+
+        .password-requirements {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #6B7280;
+            padding-left: 5px;
+        }
+
+        .password-requirements ul {
+            margin-top: 5px;
+            padding-left: 20px;
+            line-height: 1.6;
+        }
+
+        .terms-check {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 30px;
+            font-size: 14px;
+            color: #bfc3cf;
+        }
+
+        .terms-check input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #2D7CFF;
+            margin-top: 2px;
+        }
+
+        .terms-check a {
+            color: #2D7CFF;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .terms-check a:hover {
+            text-decoration: underline;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            border-radius: 10px;
+            border: none;
+            background: #2D7CFF;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 25px;
+        }
+
+        .btn-submit:hover {
+            background: #1e5fd1;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(45, 124, 255, 0.3);
+        }
+
+        .btn-submit:disabled {
+            background: #4a5568;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .small-text {
+            text-align: center;
+            color: #A0A6B5;
+            font-size: 14px;
+        }
+
+        .small-text a {
+            color: #2D7CFF;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .small-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1200px) {
+            .left-panel {
+                width: 40%;
+            }
+            .right-panel {
+                width: 60%;
+            }
+        }
+
+        @media (max-width: 968px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .left-panel {
+                width: 100%;
+                min-height: 400px;
+                padding: 60px 40px;
+            }
+
+            .right-panel {
+                width: 100%;
+                padding: 40px;
+            }
+
+            .navbar {
+                padding: 12px 30px;
+            }
+
+            .nav-center {
+                gap: 20px;
+            }
+
+            .nav-links {
+                gap: 20px;
+            }
+
+            .nav-search {
+                display: none;
+            }
+
+            .input-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVIGATION BAR -->
+<nav class="navbar">
+    <div class="nav-left">
+        <a href="/" class="nav-logo">
+            <i class="fas fa-fingerprint"></i>
+            <span>EVI</span>
+        </a>
+    </div>
+
+    <div class="nav-center">
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/login">Log In</a></li>
+            <li><a href="/signup" class="active">Join</a></li>
+            <li><a href="#">About Us</a></li>
+        </ul>
+    </div>
+
+    <div class="nav-search">
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="Search">
+    </div>
+</nav>
+
+<div class="container">
+    <!-- LEFT PANEL -->
+    <div class="left-panel">
+        <div class="branding">
+            <h2>JOIN FOR FREE</h2>
+            <h3>Unleash the <span>forensic analyst</span> inside YOU, Analyze Digital Evidence</h3>
+            <p>
+                Get started with the easiest and most secure platform to analyze UFDR files, 
+                detect anomalies, and generate comprehensive forensic reports.
+            </p>
+            <div class="btn-group">
+                <button class="btn-outline" onclick="window.location.href='/login'">Explore More</button>
+                <button class="btn-primary" onclick="window.location.href='/login'">Get Started</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="right-panel">
+        <div class="form-box">
+            <h2>Create new account.</h2>
+
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash-message flash-{{ category }}">
+                                <i class="fas fa-{{ 'exclamation-circle' if category == 'error' else 'check-circle' }}"></i>
+                                <span>{{ message }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="/signup" id="signupForm">
+                <div class="input-group">
+                    <label>Username</label>
+                    <div class="input-wrapper">
+                        <input type="text" name="username" placeholder="yourusername" required minlength="4">
+                        <i class="fas fa-user input-icon"></i>
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>First Name</label>
+                        <div class="input-wrapper">
+                            <input type="text" name="firstName" placeholder="John" required>
+                            <i class="fas fa-id-card input-icon"></i>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Last Name</label>
+                        <div class="input-wrapper">
+                            <input type="text" name="lastName" placeholder="Doe" required>
+                            <i class="fas fa-id-card input-icon"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Email</label>
+                    <div class="input-wrapper">
+                        <input type="email" name="email" placeholder="you@example.com" required>
+                        <i class="fas fa-envelope input-icon"></i>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Password</label>
+                    <div class="input-wrapper password-input">
+                        <input type="password" name="password" id="password" placeholder="•••••••••••" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword('password', 'eyeIcon1')">
+                            <i class="far fa-eye" id="eyeIcon1"></i>
+                        </button>
+                    </div>
+                    <div class="password-requirements">
+                        <small>Password must contain:</small>
+                        <ul>
+                            <li>At least 8 characters</li>
+                            <li>One uppercase letter</li>
+                            <li>One lowercase letter</li>
+                            <li>One number</li>
+                            <li>One special character</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Confirm Password</label>
+                    <div class="input-wrapper password-input">
+                        <input type="password" name="confirmPassword" id="confirmPassword" placeholder="•••••••••••" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword('confirmPassword', 'eyeIcon2')">
+                            <i class="far fa-eye" id="eyeIcon2"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="terms-check">
+                    <input type="checkbox" name="termsCheck" id="termsCheck" required>
+                    <label for="termsCheck">
+                        I agree to the <a href="/terms" target="_blank">Terms and Conditions</a> 
+                        and <a href="/privacy" target="_blank">Privacy Policy</a>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn-submit">Create Account</button>
+
+                <p class="small-text">
+                    Already A Member? <a href="/login">Log In</a>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function togglePassword(inputId, iconId) {
+        const passwordInput = document.getElementById(inputId);
+        const eyeIcon = document.getElementById(iconId);
+        
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            eyeIcon.classList.remove('fa-eye');
+            eyeIcon.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            eyeIcon.classList.remove('fa-eye-slash');
+            eyeIcon.classList.add('fa-eye');
+        }
+    }
+
+    // Password validation on form submit
+    document.getElementById('signupForm').addEventListener('submit', function(e) {
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        if (password !== confirmPassword) {
+            e.preventDefault();
+            alert('Passwords do not match!');
+            return false;
+        }
+    });
+
+    // Auto-hide flash messages after 5 seconds
+    setTimeout(() => {
+        const flashMessages = document.querySelectorAll('.flash-message');
+        flashMessages.forEach(msg => {
+            msg.style.transition = 'opacity 0.5s';
+            msg.style.opacity = '0';
+            setTimeout(() => msg.remove(), 500);
+        });
+    }, 5000);
+</script>
+
+</body>
+</html>

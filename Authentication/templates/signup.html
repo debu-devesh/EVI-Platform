@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔐 EVI - Create Account</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Modal CSS -->
+    <style>
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: #16213e;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .modal-close:hover {
+            color: var(--accent-color);
+        }
+        
+        .modal-title {
+            margin-bottom: 1.5rem;
+            color: var(--accent-color);
+            font-size: 1.5rem;
+        }
+        
+        .modal-body {
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+        
+        .modal-body h3 {
+            color: var(--text-primary);
+            margin: 1.5rem 0 1rem;
+        }
+        
+        .modal-body p {
+            margin-bottom: 1rem;
+        }
+        
+        .modal-body ul {
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-body li {
+            margin-bottom: 0.5rem;
+        }
+        :root {
+            --primary-gradient: linear-gradient(135deg, #00d4ff 0%, #3b82f6 25%, #8b5cf6 75%, #ec4899 100%);
+            --dark-bg: #1a1a2e;
+            --card-bg: #16213e;
+            --text-primary: #ffffff;
+            --text-secondary: #b8c5d6;
+            --accent-color: #00d4ff;
+            --input-bg: rgba(255, 255, 255, 0.05);
+            --input-border: rgba(255, 255, 255, 0.1);
+            --border-radius: 12px;
+            --shadow: 0 20px 40px rgba(0,0,0,0.2);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .bg-animated {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(-45deg, #1a1a2e, #16213e, #0f3460, #533483);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .auth-container {
+            background: rgba(22, 33, 62, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 1000px;
+            overflow: hidden;
+            display: flex;
+            min-height: 700px;
+        }
+
+        .auth-left {
+            flex: 1;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow-y: auto;
+            max-height: 700px;
+        }
+
+        .auth-right {
+            flex: 1;
+            background: url('assets/unnamed.jpg') no-repeat center center;
+            background-size: cover;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Removed dark overlay to show full image brightness */
+        .auth-right::before {
+            display: none;
+        }
+
+        .auth-right-content {
+            position: relative;
+            z-index: 1;
+            max-width: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            color: var(--accent-color);
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            margin-right: 0.75rem;
+        }
+
+        .auth-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .auth-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: var(--border-radius);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.2);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            width: 100%;
+            margin-top: 0.5rem;
+            font-size: 1rem;
+            padding: 0.85rem 1.5rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-google {
+            background: #fff;
+            color: #444;
+            border: 1px solid #ddd;
+            width: 100%;
+            margin-bottom: 1rem;
+            padding: 0.75rem 1.5rem;
+        }
+
+        .btn-google:hover {
+            background: #f5f5f5;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-google i {
+            margin-right: 0.5rem;
+            color: #DB4437;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 1.5rem 0;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--input-border);
+        }
+
+        .divider:not(:empty)::before {
+            margin-right: 1rem;
+        }
+
+        .divider:not(:empty)::after {
+            margin-left: 1rem;
+        }
+
+        .auth-footer {
+            margin-top: 1.5rem;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .auth-footer a {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            margin-left: 0.25rem;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 2rem 0;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            font-size: 0.95rem;
+        }
+
+        .feature-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .feature-text {
+            line-height: 1.5;
+        }
+
+        .app-version {
+            position: absolute;
+            bottom: 1.5rem;
+            left: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        /* Password strength indicator */
+        .password-strength {
+            margin-top: 0.5rem;
+            height: 4px;
+            background: var(--input-bg);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .strength-meter {
+            height: 100%;
+            width: 0;
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+
+        .strength-weak { width: 33%; background-color: #ff6b6b; }
+        .strength-medium { width: 66%; background-color: #feca57; }
+        .strength-strong { width: 100%; background-color: #1dd1a1; }
+
+        .strength-text {
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            text-align: right;
+            height: 1rem;
+        }
+
+        /* Terms and conditions */
+        .terms-text {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-top: 1rem;
+        }
+
+        .terms-text a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        .terms-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive design */
+        @media (max-width: 992px) {
+            .auth-container {
+                max-width: 100%;
+                min-height: auto;
+            }
+            
+            .auth-left {
+                padding: 2rem 1.5rem;
+                max-height: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .auth-container {
+                flex-direction: column;
+            }
+
+            .auth-right {
+                display: none;
+            }
+
+            .app-version {
+                display: none;
+            }
+        }
+
+        /* Form elements */
+        .password-input {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0.25rem;
+            font-size: 1rem;
+        }
+
+        .is-invalid {
+            border-color: #ff6b6b !important;
+        }
+
+        .invalid-feedback {
+            color: #ff6b6b;
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .is-invalid + .invalid-feedback,
+        .is-invalid ~ .invalid-feedback {
+            display: block;
+        }
+
+        .btn-loading {
+            position: relative;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .btn-loading::after {
+            content: '';
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 0.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .form-check {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .form-check-input {
+            width: 1.1rem;
+            height: 1.1rem;
+            margin-right: 0.5rem;
+            margin-top: 0.2rem;
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 4px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e");
+        }
+
+        .form-check-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            line-height: 1.4;
+        }
+
+        .form-check-label a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        .form-check-label a:hover {
+            text-decoration: underline;
+        }
+
+        /* Animation for form elements */
+        .form-group, .form-check, .btn-primary, .divider, .btn-google {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Add delay for each form group */
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; }
+        .form-group:nth-child(3) { animation-delay: 0.3s; }
+        .form-group:nth-child(4) { animation-delay: 0.4s; }
+        .form-group:nth-child(5) { animation-delay: 0.5s; }
+        .form-group:nth-child(6) { animation-delay: 0.6s; }
+        .form-group:nth-child(7) { animation-delay: 0.7s; }
+        .form-check { animation-delay: 0.8s; }
+        .btn-primary { animation-delay: 0.9s; }
+        .divider { animation-delay: 1s; }
+        .btn-google { animation-delay: 1.1s; }
+    </style>
+</head>
+<body>
+    <div class="bg-animated"></div>
+    
+    <div class="auth-container">
+        <!-- Left Side - Signup Form -->
+        <div class="auth-left">
+            <div class="logo">
+                <i class="fas fa-fingerprint"></i>
+                <span>EVI</span>
+            </div>
+            
+            <h1 class="auth-title">Create Account</h1>
+            <p class="auth-subtitle">Join our forensic analysis platform today</p>
+            
+            <form id="signupForm" class="auth-form" method="POST" action="/signup">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="firstName" class="form-label">First Name</label>
+                            <input type="text" id="firstName" name="firstName" class="form-control" placeholder="John" required>
+                            <div class="invalid-feedback">Please enter your first name</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="lastName" class="form-label">Last Name</label>
+                            <input type="text" id="lastName" name="lastName" class="form-control" placeholder="Doe" required>
+                            <div class="invalid-feedback">Please enter your last name</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="your@email.com" required>
+                    <div class="invalid-feedback">Please enter a valid email address</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" id="username" name="username" class="form-control" placeholder="Choose a username" required>
+                    <div class="invalid-feedback">Username must be at least 4 characters</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="password-input">
+                        <input type="password" id="password" name="password" class="form-control" placeholder="Create a strong password" required>
+                        <button type="button" class="toggle-password" id="togglePassword">
+                            <i class="far fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="password-strength">
+                        <div class="strength-meter" id="passwordStrength"></div>
+                    </div>
+                    <div class="strength-text" id="passwordStrengthText"></div>
+                    <div class="invalid-feedback" id="passwordError">Password must be at least 8 characters</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword" class="form-label">Confirm Password</label>
+                    <div class="password-input">
+                        <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="Confirm your password" required>
+                        <button type="button" class="toggle-password" id="toggleConfirmPassword">
+                            <i class="far fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="invalid-feedback" id="confirmPasswordError">Passwords do not match</div>
+                </div>
+                
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="termsCheck" name="termsCheck" required>
+                    <label class="form-check-label" for="termsCheck">
+                        I agree to the <a href="#" id="termsLink">Terms of Service</a> and <a href="#" id="privacyLink">Privacy Policy</a>
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" id="signupBtn">
+                    <span>Create Account</span>
+                </button>
+                
+                <div class="divider">OR</div>
+                
+                <button type="button" class="btn btn-google">
+                    <i class="fab fa-google"></i>
+                    <span>Sign up with Google</span>
+                </button>
+                
+                <div class="auth-footer">
+                    Already have an account? <a href="/login">Sign in</a>
+                </div>
+            </form>
+            
+            <div class="app-version">EVI v2.0.3</div>
+        </div>
+        
+        <!-- Right Side - Welcome/Info -->
+        <div class="auth-right">
+            <div class="auth-right-content">
+                <!-- Background image only -->
+            </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal HTML -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModal">&times;</button>
+            <h2 class="modal-title" id="modalTitle">Terms of Service</h2>
+            <div class="modal-body" id="modalContent">
+                <!-- Content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modal functionality
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalContent = document.getElementById('modalContent');
+        const closeModal = document.getElementById('closeModal');
+        const termsLink = document.getElementById('termsLink');
+        const privacyLink = document.getElementById('privacyLink');
+        
+        // Terms and Privacy content
+        const termsContent = `
+            <h3>1. Acceptance of Terms</h3>
+            <p>By accessing or using our service, you agree to be bound by these Terms of Service.</p>
+            
+            <h3>2. User Responsibilities</h3>
+            <p>You are responsible for maintaining the confidentiality of your account and password.</p>
+            
+            <h3>3. Service Usage</h3>
+            <p>The service is provided "as is" without any warranties of any kind.</p>
+        `;
+        
+        const privacyContent = `
+            <h3>1. Information We Collect</h3>
+            <p>We collect information that you provide when you register or use our services.</p>
+            
+            <h3>2. How We Use Your Information</h3>
+            <p>Your information is used to provide and improve our services.</p>
+            
+            <h3>3. Data Security</h3>
+            <p>We implement security measures to protect your personal information.</p>
+        `;
+        
+        // Show modal with content
+        function showModal(title, content) {
+            modalTitle.textContent = title;
+            modalContent.innerHTML = content;
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        // Close modal
+        function hideModal() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Event listeners
+        termsLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            showModal('Terms of Service', termsContent);
+        });
+        
+        privacyLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            showModal('Privacy Policy', privacyContent);
+        });
+        
+        closeModal.addEventListener('click', hideModal);
+        
+        // Close modal when clicking outside content
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                hideModal();
+            }
+        });
+        
+        // Close with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                hideModal();
+            }
+        });
+        
+        // DOM Elements
+        const signupForm = document.getElementById('signupForm');
+        const firstNameInput = document.getElementById('firstName');
+        const lastNameInput = document.getElementById('lastName');
+        const emailInput = document.getElementById('email');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const togglePasswordBtn = document.getElementById('togglePassword');
+        const toggleConfirmPasswordBtn = document.getElementById('toggleConfirmPassword');
+        const passwordStrength = document.getElementById('passwordStrength');
+        const passwordStrengthText = document.getElementById('passwordStrengthText');
+        const signupBtn = document.getElementById('signupBtn');
+        const termsCheck = document.getElementById('termsCheck');
+        
+        // Toggle password visibility
+        function setupPasswordToggle(button, input) {
+            button.addEventListener('click', function() {
+                const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                input.setAttribute('type', type);
+                this.querySelector('i').classList.toggle('fa-eye');
+                this.querySelector('i').classList.toggle('fa-eye-slash');
+            });
+        }
+        
+        setupPasswordToggle(togglePasswordBtn, passwordInput);
+        setupPasswordToggle(toggleConfirmPasswordBtn, confirmPasswordInput);
+        
+        // Password strength checker
+        function checkPasswordStrength(password) {
+            let strength = 0;
+            let messages = [];
+            
+            // Length check
+            if (password.length >= 8) strength += 1;
+            
+            // Contains lowercase
+            if (/[a-z]/.test(password)) strength += 1;
+            
+            // Contains uppercase
+            if (/[A-Z]/.test(password)) strength += 1;
+            
+            // Contains number
+            if (/[0-9]/.test(password)) strength += 1;
+            
+            // Contains special char
+            if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+            
+            // Update UI
+            let strengthClass = '';
+            let strengthMessage = '';
+            
+            if (password.length === 0) {
+                strengthClass = '';
+                strengthMessage = '';
+            } else if (strength <= 2) {
+                strengthClass = 'strength-weak';
+                strengthMessage = 'Weak password';
+            } else if (strength <= 4) {
+                strengthClass = 'strength-medium';
+                strengthMessage = 'Good password';
+            } else {
+                strengthClass = 'strength-strong';
+                strengthMessage = 'Strong password';
+            }
+            
+            passwordStrength.className = 'strength-meter ' + strengthClass;
+            passwordStrength.style.width = (strength / 5 * 100) + '%';
+            passwordStrengthText.textContent = strengthMessage;
+            
+            return strength >= 3; // Minimum 3 out of 5 for valid password
+        }
+        
+        // Form validation
+        function validateForm() {
+            let isValid = true;
+            
+            // Reset all error states
+            document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+            
+            // Validate first name
+            if (!firstNameInput.value.trim()) {
+                firstNameInput.classList.add('is-invalid');
+                isValid = false;
+            }
+            
+            // Validate last name
+            if (!lastNameInput.value.trim()) {
+                lastNameInput.classList.add('is-invalid');
+                isValid = false;
+            }
+            
+            // Validate email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(emailInput.value)) {
+                emailInput.classList.add('is-invalid');
+                isValid = false;
+            }
+            
+            // Validate username
+            if (usernameInput.value.length < 4) {
+                usernameInput.classList.add('is-invalid');
+                isValid = false;
+            }
+            
+            // Validate password
+            const isPasswordStrong = checkPasswordStrength(passwordInput.value);
+            if (!isPasswordStrong) {
+                passwordInput.classList.add('is-invalid');
+                document.getElementById('passwordError').textContent = 'Password is too weak';
+                isValid = false;
+            } else if (passwordInput.value.length < 8) {
+                passwordInput.classList.add('is-invalid');
+                document.getElementById('passwordError').textContent = 'Password must be at least 8 characters';
+                isValid = false;
+            }
+            
+            // Validate password match
+            if (passwordInput.value !== confirmPasswordInput.value) {
+                confirmPasswordInput.classList.add('is-invalid');
+                document.getElementById('confirmPasswordError').textContent = 'Passwords do not match';
+                isValid = false;
+            }
+            
+            // Validate terms
+            if (!termsCheck.checked) {
+                termsCheck.classList.add('is-invalid');
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+        
+        // Real-time validation
+        passwordInput.addEventListener('input', function() {
+            checkPasswordStrength(this.value);
+            this.classList.remove('is-invalid');
+        });
+        
+        confirmPasswordInput.addEventListener('input', function() {
+            if (this.value !== passwordInput.value) {
+                this.classList.add('is-invalid');
+                document.getElementById('confirmPasswordError').textContent = 'Passwords do not match';
+            } else {
+                this.classList.remove('is-invalid');
+            }
+        });
+        
+        // Form submission
+        signupForm.addEventListener('submit', function(e) {
+            // Validate form before submission
+            if (!validateForm()) {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Show loading state (form will submit normally)
+            const originalBtnText = signupBtn.innerHTML;
+            signupBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
+            signupBtn.disabled = true;
+            signupBtn.classList.add('btn-loading');
+            
+            // Let the form submit normally - Flask will handle it
+            return true;
+        });
+        
+        // Initialize tooltips
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    </script>
+    
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+.git
+.gitignore
+EBI-scan/
+data/
+docs/
+site/
+*.db
+.encryption_key
+__pycache__/
+*.pyc
+FORENSIC/data/
+FORENSIC/tests/
+**/.env
+**/.env.*
+!**/.env.example
+**/*.db
+**/.encryption_key

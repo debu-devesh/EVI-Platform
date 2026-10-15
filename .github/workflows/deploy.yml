@@ -1,0 +1,72 @@
+name: Build, Scan, and Deploy EVI
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write   # REQUIRED — lets GitHub request the OIDC token
+  contents: read
+
+env:
+  AWS_REGION: ap-south-1              # ALREADY changed to your actual region
+  ECR_REPOSITORY: evi-backend             # ALREADY changed to your actual ECR repo name
+  ECS_CLUSTER: evi-cluster            # ALREADY changed to your actual cluster name
+  ECS_SERVICE: evi-service            # ALREADY changed to your actual service name
+  ALB_HEALTH_URL: evi-alb-1138650397.ap-south-1.elb.amazonaws.com/api/health
+
+jobs:
+  build-scan-push-deploy:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to ECR
+        id: ecr-login
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build image
+        run: |
+          docker build -t $ECR_REPOSITORY:${{ github.sha }} .
+
+      - name: Scan image with Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: '${{ env.ECR_REPOSITORY }}:${{ github.sha }}'
+          format: 'table'
+          exit-code: '0'
+          severity: 'CRITICAL,HIGH'
+          ignore-unfixed: true
+
+      - name: Tag and push to ECR
+        env:
+          ECR_REGISTRY: ${{ steps.ecr-login.outputs.registry }}
+        run: |
+          docker tag $ECR_REPOSITORY:${{ github.sha }} $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.sha }}
+          docker tag $ECR_REPOSITORY:${{ github.sha }} $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.sha }}
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+
+      - name: Deploy new task definition to ECS
+        run: |
+          aws ecs update-service \
+            --cluster $ECS_CLUSTER \
+            --service $ECS_SERVICE \
+            --force-new-deployment
+
+      - name: Wait for ECS service to stabilize
+        run: |
+          aws ecs wait services-stable \
+            --cluster $ECS_CLUSTER \
+            --services $ECS_SERVICE
+
+      - name: Smoke test via ALB
+        run: |
+          curl -f --retry 5 --retry-delay 10 --retry-connrefused $ALB_HEALTH_URL

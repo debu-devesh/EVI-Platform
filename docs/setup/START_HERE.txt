@@ -1,0 +1,113 @@
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║            🔍 EVI - Digital Forensics Tool                  ║
+║                    Version 2.0.1                             ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+
+📋 QUICK START INSTRUCTIONS
+═══════════════════════════════════════════════════════════════
+
+STEP 1: Check if Python is installed
+─────────────────────────────────────
+  • Open Command Prompt (Windows) or Terminal (Mac/Linux)
+  • Type: python --version  (or python3 --version on Mac/Linux)
+  • If you see a version number, you're good!
+  • If not, install Python from: https://www.python.org/downloads/
+    ⚠️ IMPORTANT: Check "Add Python to PATH" during installation
+
+
+STEP 2: Navigate to FORENSIC folder
+────────────────────────────────────
+  • Open Command Prompt/Terminal
+  • Type: cd "path/to/EVI(2.0.1)/FORENSIC"
+  • Example: cd "C:\Users\YourName\Desktop\EVI(2.0.1)\FORENSIC"
+
+
+STEP 3: Run Setup (Choose ONE method)
+──────────────────────────────────────
+
+  METHOD A - Easiest (Windows):
+    • Double-click: QUICK_START.bat
+    • OR run: python setup_minimal.py
+
+  METHOD B - Easiest (Mac/Linux):
+    • Run: chmod +x QUICK_START.sh
+    • Then: ./QUICK_START.sh
+    • OR run: python3 setup_minimal.py
+
+  METHOD C - Manual:
+    • Run: pip install Flask pandas rapidfuzz orjson
+    • (Use pip3 on Mac/Linux if pip doesn't work)
+
+
+STEP 4: Start the Application
+──────────────────────────────
+  Windows:
+    • Double-click: start_web.bat
+    • OR run: python start_enhanced_web_interface.py
+
+  Mac/Linux:
+    • Run: python3 start_enhanced_web_interface.py
+
+
+STEP 5: Open in Browser
+────────────────────────
+  • Open your web browser
+  • Go to: http://localhost:5000
+  • Development Mode: If DEV_MODE=True, you'll go to Case Manager directly
+  • Production Mode: You'll see login page - create account or login
+  • After login, you'll see the Case Manager interface!
+
+
+✅ TEST IT WORKS:
+─────────────────
+  1. Create a case (from Case Manager if in production mode)
+  2. Upload a test file from: FORENSIC/data/synthetic/
+  3. Try query: "show messages with external partners"
+  4. Export PDF report to test export functionality
+  5. If you see results, everything works! 🎉
+
+📌 NOTE ABOUT LM STUDIO:
+────────────────────────
+  • LM Studio is REQUIRED for AI Chat Assistant feature
+  • Core features work without LM Studio, but AI Chat needs it
+  • To enable AI Chat: Install LM Studio from https://lmstudio.ai/
+  • After installing: Download "Qwen/Qwen2.5-3B-Instruct" model in LM Studio
+  • Start the server from LM Studio's "Local Server" tab
+  • Or run: python scripts/setup_with_lm_studio.py (checks everything)
+
+
+❌ TROUBLESHOOTING:
+───────────────────
+
+  Problem: "Python is not recognized"
+  Solution: Install Python and check "Add to PATH"
+
+  Problem: "Module not found"
+  Solution: Run: python setup_minimal.py
+
+  Problem: "Port 5000 already in use"
+  Solution: Close other apps or wait a few minutes
+
+  Problem: "Permission denied" (Mac/Linux)
+  Solution: Use python3 instead of python
+
+  Problem: "Authentication required" or login issues
+  Solution: 
+    • For development: Set DEV_MODE=True environment variable
+    • For production: Create account via signup page
+    • If database missing: Run python Authentication/setup_database.py
+
+
+📚 MORE HELP:
+─────────────
+  • See README.md for detailed documentation
+  • See INSTALLATION.md for step-by-step setup
+  • See FORENSIC/FULL_FUNCTIONALITY_GUIDE.md for features
+
+
+═══════════════════════════════════════════════════════════════
+That's it! You should be up and running in 5 minutes! 🚀
+═══════════════════════════════════════════════════════════════
+

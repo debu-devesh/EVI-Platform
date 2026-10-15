@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+        // Force light theme for audit logs page for better readability
+        (function() {
+            document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit Logs - Chain of Custody - EVI</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #00d4ff 0%, #3b82f6 25%, #8b5cf6 75%, #ec4899 100%);
+        }
+
+        /* Dark Mode Variables (Default) */
+        [data-theme="dark"] {
+            --dark-bg: #0a0e27;
+            --card-bg: rgba(15, 23, 42, 0.5);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent-color: #3b82f6;
+            --border-color: rgba(59, 130, 246, 0.2);
+            --hover-bg: rgba(59, 130, 246, 0.1);
+        }
+
+        /* Light Mode Variables - Enhanced for readability */
+        [data-theme="light"] {
+            --dark-bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --accent-color: #3b82f6;
+            --border-color: rgba(203, 213, 225, 0.6);
+            --hover-bg: rgba(59, 130, 246, 0.08);
+        }
+        
+        /* Force light theme styles */
+        body {
+            background: #f8fafc !important;
+            color: #1e293b !important;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(59, 130, 246, 0.5);
+            border-radius: 5px;
+            transition: background 0.2s ease;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(59, 130, 246, 0.7);
+        }
+
+        /* Header */
+        .header {
+            background: #ffffff;
+            border-bottom: 2px solid #e2e8f0;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: #3b82f6;
+            font-weight: 700;
+            font-size: 1.25rem;
+            transition: all 0.3s ease;
+        }
+        
+        .logo:hover {
+            transform: translateY(-1px);
+            opacity: 0.9;
+        }
+
+        .logo i {
+            font-size: 1.75rem;
+            color: #3b82f6;
+            filter: drop-shadow(0 2px 4px rgba(59, 130, 246, 0.3));
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover i {
+            filter: drop-shadow(0 4px 8px rgba(59, 130, 246, 0.5));
+        }
+
+        .logo span {
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: #dbeafe;
+            transform: translateX(-2px);
+            color: #1d4ed8;
+            border-color: #93c5fd;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .header-title h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0;
+        }
+        
+        .header-title .icon {
+            font-size: 1.75rem;
+            color: #3b82f6;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-btn {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 0.5rem;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #475569;
+        }
+
+        .header-btn:hover {
+            background: #e2e8f0;
+            transform: translateY(-1px);
+            color: #334155;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Info Card */
+        .info-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .info-card p {
+            color: #475569;
+            margin: 0;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Filters Card */
+        .filters-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .filters-card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control, .form-select {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            color: #1e293b;
+            border-radius: 8px;
+            padding: 0.6rem 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background: #ffffff;
+            border-color: #3b82f6;
+            color: #1e293b;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            outline: none;
+        }
+        
+        .form-control::placeholder {
+            color: #94a3b8;
+        }
+
+        .btn-filter {
+            background: var(--accent-color);
+            border: none;
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-filter:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-clear {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            color: #475569;
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-clear:hover {
+            background: #e2e8f0;
+            color: #334155;
+            border-color: #94a3b8;
+        }
+
+        /* Table Card */
+        .table-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .table-header {
+            padding: 1.5rem;
+            border-bottom: 2px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8fafc;
+        }
+
+        .table-header h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+        
+        .table {
+            margin: 0;
+            color: #1e293b;
+            width: 100%;
+            background: #ffffff;
+        }
+        
+        .table thead {
+            background: #f1f5f9;
+        }
+        
+        .table thead th {
+            border-bottom: 2px solid #e2e8f0;
+            color: #3b82f6;
+            font-weight: 600;
+            padding: 1rem;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: #f8fafc;
+        }
+        
+        .table tbody tr {
+            border-bottom: 1px solid #e2e8f0;
+            transition: background 0.2s ease;
+            background: #ffffff;
+        }
+        
+        .table tbody tr:hover {
+            background: #f1f5f9;
+        }
+        
+        .table tbody td {
+            padding: 1rem;
+            vertical-align: middle;
+            font-size: 0.9rem;
+            color: #1e293b;
+        }
+
+        .table tbody td small {
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+        
+        /* Badges */
+        .badge {
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        
+        .badge-success {
+            background: #dcfce7;
+            color: #16a34a;
+            border: 1px solid #86efac;
+            font-weight: 600;
+        }
+        
+        .badge-danger {
+            background: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #fca5a5;
+            font-weight: 600;
+        }
+        
+        .action-badge {
+            display: inline-block;
+            padding: 0.35rem 0.7rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            background: #dbeafe;
+            color: #2563eb;
+            border: 1px solid #93c5fd;
+        }
+        
+        code {
+            background: #f1f5f9;
+            color: #2563eb;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-family: 'Courier New', monospace;
+            border: 1px solid #cbd5e1;
+        }
+        
+        /* Details JSON */
+        .details-json {
+            max-width: 400px;
+            max-height: 150px;
+            overflow: auto;
+        }
+        
+        .details-json pre {
+            margin: 0;
+            font-size: 0.8rem;
+            color: #475569;
+            font-family: 'Courier New', monospace;
+            background: #f8fafc;
+            padding: 0.75rem;
+            border-radius: 6px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            border: 1px solid #e2e8f0;
+            line-height: 1.5;
+        }
+        
+        /* No Logs State */
+        .no-logs {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #64748b;
+        }
+
+        .no-logs i {
+            font-size: 4rem;
+            color: #94a3b8;
+            margin-bottom: 1rem;
+            opacity: 0.6;
+        }
+
+        .no-logs p {
+            font-size: 1.1rem;
+            margin: 0;
+            color: #475569;
+        }
+        
+        .no-logs a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+        
+        .no-logs a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 1rem;
+            }
+
+            .header {
+                padding: 1rem;
+            }
+
+            .header-title h1 {
+                font-size: 1.25rem;
+            }
+
+            .table-responsive {
+                font-size: 0.85rem;
+        }
+        
+            .table thead th,
+            .table tbody td {
+                padding: 0.75rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-left">
+                <a href="/case-manager" class="back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back</span>
+                </a>
+                <a href="/cases" class="logo">
+                    <i class="fas fa-fingerprint"></i>
+                    <span>EVI</span>
+                </a>
+                <div class="header-title">
+                    <i class="fas fa-shield-alt icon"></i>
+                    <h1>Audit Logs</h1>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Info Card -->
+        <div class="info-card">
+            <p>
+                <i class="fas fa-info-circle" style="color: var(--accent-color); margin-right: 0.5rem;"></i>
+                Complete audit trail of all security-relevant actions in the system. This log maintains chain of custody for forensic evidence.
+            </p>
+        </div>
+        
+        <!-- Filters -->
+        <div class="filters-card">
+            <h3>
+                <i class="fas fa-filter"></i>
+                Filters
+            </h3>
+            <form method="GET" action="/audit-logs">
+                <div class="row g-3">
+                <div class="col-md-4">
+                        <label for="action" class="form-label">Action</label>
+                    <input type="text" class="form-control" id="action" name="action" 
+                               placeholder="e.g., create_case, login" value="{{ action_filter or '' }}">
+                </div>
+                    <div class="col-md-3">
+                        <label for="user_id" class="form-label">User ID</label>
+                    <input type="number" class="form-control" id="user_id" name="user_id" 
+                           placeholder="User ID" value="{{ user_filter or '' }}">
+                </div>
+                    <div class="col-md-3">
+                    <label for="limit" class="form-label">Limit</label>
+                    <select class="form-select" id="limit" name="limit">
+                            <option value="50" {% if request.args.get('limit', '100')|int == 50 %}selected{% endif %}>50</option>
+                            <option value="100" {% if request.args.get('limit', '100')|int == 100 %}selected{% endif %}>100</option>
+                            <option value="200" {% if request.args.get('limit', '100')|int == 200 %}selected{% endif %}>200</option>
+                            <option value="500" {% if request.args.get('limit', '100')|int == 500 %}selected{% endif %}>500</option>
+                    </select>
+                </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-filter w-100">
+                            <i class="fas fa-search"></i>
+                            Apply
+                    </button>
+                    </div>
+                </div>
+                {% if action_filter or user_filter %}
+                <div class="mt-3">
+                    <a href="/audit-logs" class="btn-clear">
+                        <i class="fas fa-times"></i>
+                        Clear Filters
+                    </a>
+                </div>
+                {% endif %}
+            </form>
+        </div>
+        
+        <!-- Table -->
+        <div class="table-card">
+            <div class="table-header">
+                <h3>
+                    <i class="fas fa-list"></i>
+                    Audit Trail
+                    {% if logs %}
+                    <span style="color: var(--text-secondary); font-weight: 400; font-size: 0.9rem; margin-left: 0.5rem;">
+                        ({{ logs|length }} entries)
+                    </span>
+                    {% endif %}
+                </h3>
+            </div>
+            
+            {% if logs %}
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>User</th>
+                            <th>Action</th>
+                            <th>Resource</th>
+                            <th>Status</th>
+                            <th>IP Address</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in logs %}
+                        <tr>
+                            <td>
+                                <small>{{ log.timestamp }}</small>
+                            </td>
+                            <td>
+                                <strong>{{ log.user_id or 'N/A' }}</strong>
+                            </td>
+                            <td>
+                                <span class="action-badge">{{ log.action }}</span>
+                            </td>
+                            <td>
+                                <code>{{ log.resource or 'N/A' }}</code>
+                            </td>
+                            <td>
+                                {% if log.success %}
+                                <span class="badge badge-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Success
+                                </span>
+                                {% else %}
+                                <span class="badge badge-danger">
+                                    <i class="fas fa-times-circle"></i>
+                                    Failed
+                                </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <small>{{ log.ip_address or 'N/A' }}</small>
+                            </td>
+                            <td>
+                                {% if log.details %}
+                                <div class="details-json">
+                                    <pre>{{ log.details }}</pre>
+                                </div>
+                                {% else %}
+                                <span style="color: var(--text-secondary);">-</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="no-logs">
+                <i class="fas fa-inbox"></i>
+                <p>No audit logs found</p>
+                {% if action_filter or user_filter %}
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">
+                    Try adjusting your filters or <a href="/audit-logs" style="color: #3b82f6;">clear them</a>
+                </p>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

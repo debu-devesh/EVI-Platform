@@ -1,0 +1,150 @@
+# Python cache files (regenerated automatically)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments (each developer creates their own)
+venv/
+env/
+ENV/
+.venv
+
+# IDE files (optional - remove if you want these tracked)
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+desktop.ini
+Thumbs.db
+
+# Environment variables (contains secrets - keep ignored)
+.env
+.env.local
+.env.*.local
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Test coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+
+# Large test data (excluded due to size - 4.65+ GB)
+Testing(UFDR)/
+
+# Old/unrelated folders
+Image Model/
+chat improvements/
+
+# Large extracted data folders (excluded - too large for GitHub)
+FORENSIC/data/extracted_ufdrs/
+FORENSIC/data/uploaded_ufdrs/
+FORENSIC/data/UFDR's(new)/
+FORENSIC/data/uploads/
+FORENSIC/data/synthetic/
+
+# Database files with data (excluded - contain user/session data)
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+
+# BUT allow empty schema databases and SQL files
+!**/schema/*.db
+!**/schema/*.sqlite
+!*.sql
+
+# Log files
+*.log
+audit.log
+
+# Large media files (excluded - too large for GitHub)
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.tiff
+*.webp
+*.ico
+*.mp4
+*.avi
+*.mov
+*.wmv
+*.flv
+*.mkv
+*.webm
+*.mp3
+*.wav
+*.ogg
+*.flac
+*.aac
+*.m4a
+*.zip
+*.rar
+*.7z
+*.tar
+*.gz
+
+# Large binary files
+*.exe
+!CellebriteReader.exe
+*.apk
+*.0
+*no-ext
+
+# Old analysis files (optional - remove if you want to keep them)
+# CELLEBRITE_PARSER_ANALYSIS.md
+# PROJECT_ANALYSIS.md
+# PROJECT_ANALYSIS_COMPLETE.md
+# COMPREHENSIVE_PROJECT_ANALYSIS.md
+
+# Local accidental artifacts
+*_Report_*.xml
+
+# Query feedback / learned routing (created at runtime; do not publish)
+FORENSIC/data/query_feedback.jsonl
+FORENSIC/data/query_policy_memory.json
+
+# Google Pixel G013A sample exports (exclude from public repo)
+**/*G013A*
+
+terraform/terraform.tfvars
+terraform/.terraform/
+terraform/*.tfstate*
+
+# NOTE: Everything else is tracked, including:
+# - All source code
+# - Core documentation (README.md, INSTALLATION.md, etc.)
+# - Configuration files
+
+trust-policy.json
+trust-policy.json
+**/.env
+**/.env.*
+!**/.env.example
+*.tfstate*
+*.tfplan
+tfplan
+terraform/.terraform/
+*.tfvars
+!*.tfvars.example
+.encryption_key
+*.db
+Google*Report*.xml
+.cursor/

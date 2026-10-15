@@ -1,0 +1,83 @@
+# ============================================================================
+# EVI - Complete Requirements File
+# ============================================================================
+# This file contains ALL dependencies needed for EVI to function.
+# Install with: pip install -r requirements.txt
+# ============================================================================
+
+# Core Web Framework (REQUIRED)
+Flask==2.3.3
+Werkzeug==2.3.7
+Jinja2>=3.0.0
+
+# Data Processing (REQUIRED)
+pandas==2.1.3
+numpy==1.24.4
+python-dateutil==2.8.2
+
+# String Matching & Search (REQUIRED)
+rapidfuzz==3.9.7
+
+# RAG Engine Dependencies (OPTIONAL - RAG is currently disabled)
+# These are kept for future use or if RAG is re-enabled
+faiss-cpu==1.8.0.post1
+sentence-transformers>=2.7.0
+huggingface_hub>=0.20.0
+
+# AI/ML Libraries (OPTIONAL - Required for AI Chat Assistant with LM Studio)
+# Note: transformers 4.35.2 is compatible with PyTorch 2.1+
+# If you upgrade to PyTorch 2.2+, you can use transformers 4.57.3
+transformers==4.35.2
+torch>=2.1.0
+torchvision>=0.16.0
+tokenizers>=0.14,<0.19
+accelerate==1.12.0
+bitsandbytes==0.41.3
+
+# Image Processing (REQUIRED)
+Pillow>=10.0.0
+
+# NLP Libraries (REQUIRED for enhanced query processing)
+nltk==3.8.1
+spacy==3.7.2
+scikit-learn==1.3.2
+
+# PDF Generation (REQUIRED)
+reportlab>=4.0.7
+beautifulsoup4>=4.12.3
+
+# HTTP Requests (REQUIRED)
+requests==2.32.3
+
+# Authentication (REQUIRED)
+bcrypt==4.0.1
+
+# Security & Encryption (REQUIRED)
+cryptography>=41.0.0
+langdetect==1.0.9
+
+# Additional Dependencies
+# These are automatically installed as dependencies of the above packages
+# but listed here for completeness:
+# - typing-extensions (for Python < 3.9)
+# - certifi (for SSL certificates)
+# - charset-normalizer (for requests)
+# - idna (for requests)
+# - urllib3 (for requests)
+# - MarkupSafe (for Jinja2)
+# - click (for Flask)
+# - itsdangerous (for Flask)
+# - blinker (for Flask signals)
+# - greenlet (for SQLAlchemy if used)
+# - filelock (for transformers)
+# - fsspec (for file systems)
+# - packaging (for version handling)
+# - pyyaml (for YAML parsing)
+# - safetensors (for model loading)
+# - regex (for text processing)
+# - tqdm (for progress bars)
+# - sympy (for PyTorch)
+# - networkx (for PyTorch)
+
+# Optional: Faster Hugging Face downloads
+# hf_xet>=1.2.0  # Uncomment if needed for faster model downloads
